@@ -1,0 +1,47 @@
+<div class="order-form">
+  <div class="header">
+    <h2>Thông tin vé</h2>
+  </div>
+  <div class="">
+    <div class="mt-3">
+      <p class="title">Tên tour: {{data.title}}</p>
+      <p class="duration">Thời lượng: {{data.duration}} ngày</p>
+      <p class="start">Ngày bắt đầu: {{data.startDate}}</p>
+    </div>
+    <div>
+      <form [formGroup]="orderForm">
+        <div class="mt-3">
+          <mat-form-field class="w-100">
+            <label for="quantity"></label>
+            <input matInput id="quantity" type="number" class="w-100" placeholder="Số vé" formControlName="quantity" (keyup)="keyUp()">
+            <mat-error *ngIf="orderForm.controls.quantity.touched && orderForm.controls.quantity.invalid">
+              <span *ngIf="orderForm.controls.quantity.errors.required">Số lượng vé không được bỏ trống</span>
+            </mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="mt-3">
+          <label for="note"></label>
+          <textarea id="note" type="text" class="form-control" placeholder="Ghi chú cho chúng tôi" [formControl]="orderForm.note"
+                    cdkTextareaAutosize
+                    cdkAutosizeMaxRows = 10
+                    cdkAutosizeMinRows = 4
+                    formControlName="note"
+          ></textarea>
+        </div>
+      </form>
+    </div>
+
+    <div class="total mt-3">
+    <p class="total-amount">Tổng thanh toán: {{totalAmount}}</p>
+    </div>
+
+    <div class="submit mt-5 d-flex justify-content-between">
+      <div >
+        <button mat-raised-button [disabled]="!orderForm.valid" class="btn btn-success" (click)="createPayment()">Xác nhận</button> </div>
+      <div >
+        <button mat-dialog-close mat-raised-button class="btn btn-danger">Hủy bỏ</button> </div>
+    </div>
+
+  </div>
+</div>

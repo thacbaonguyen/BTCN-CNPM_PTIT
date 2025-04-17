@@ -1,0 +1,28 @@
+body{
+  background-color: #ffffff;
+}
+
+.header{
+  display: flex;
+  justify-content: space-between;
+}
+.header h1{
+  font-weight: 700;
+}
+.action{
+  display: flex;
+  justify-content: space-between;
+}
+.accept{
+  background-color: #408AD0;
+  color: #ffffff;
+}
+.reject{
+  background-color: #de303f;
+  color: #ffffff;
+}
+.content h1{
+  font-size: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}

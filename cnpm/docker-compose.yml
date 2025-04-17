@@ -1,0 +1,73 @@
+version: '3.8'
+
+## services
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cnpm-NTD
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/cnpm?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=123456
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQL8Dialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+    depends_on:
+      - mysql
+      - redis
+    restart: always
+    networks:
+      - cnpm-network
+  frontend:
+    build:
+      context: ../codesphere #chinh lai duong dan den cai file docker trong fe cua ban
+      dockerfile: Dockerfile
+    container_name: cnpm-NTD-fe
+    ports:
+      - "4200:80"
+    depends_on:
+      - app
+    restart: always
+    networks:
+      - cnpm-network
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=cnpm
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./cnpm.sql:/docker-entrypoint-initdb.d/cnpm.sql
+    restart: always
+    networks:
+      - cnpm-network
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis-data:/data
+    restart: always
+    networks:
+      - cnpm-network
+    command: redis-server --appendonly yes
+
+networks:
+  cnpm-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  redis-data:
